@@ -2,15 +2,14 @@ function [accuracy]=BPN(TrainInput,TrainOutput,TestInput,TestOutput)
 
 [row,column]=size(TrainInput');
 
-hidden_node = round((row+1)/2); %BPN 隱藏層的node個數設定
+hidden_node = round((row+1)/2); 
 
 %hidden_node = 2;
-%parfor ...end  ->>為 matlab 的平行運算, 速度比for快3倍以上(看你的cpu核心數量)
 net.trainParam.epochs=1000;
 net.trainParam.lr=0.05;
 net.trainParam.mc=0.05;
 net = newff(TrainInput,TrainOutput,hidden_node);
-net.trainParam.showWindow=0; % 關掉疊代視窗--nntraintool('close')
+net.trainParam.showWindow=0; 
 
 net = train(net,TrainInput,TrainOutput);
 
