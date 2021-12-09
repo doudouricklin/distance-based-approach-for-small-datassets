@@ -1,5 +1,4 @@
 
-% 分割資料依據不同類別
 function [pattern1,pattern2,pattern3,pattern4] = cut_class_data(pattern)
 
 s_size = length(pattern(:,1));
