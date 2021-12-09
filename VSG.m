@@ -2,17 +2,12 @@ function [VS_IMTD,VS_IMTD_Class,VS_MTD,VS_MTD_Class]=VSG(inputdata,class_vs_size
 
 %clc
 %clear
-%data=load('BC.txt'); %載資料
-%inputdata=data;
-%class_vs_size=2;
 
 %inputdata=[1 5 1;1 5 1;1 5 1; 2 4 2; 2 2 2; 2 3 2];
 %class_vs_size=2;
 [row,column]=size(inputdata);
 FeedingS_Class=inputdata(:,column);
 FeedingS_attr=inputdata(:,1:(column-1));
-%每個類別產生的虛擬樣本數量
-
 
 %MTD%
 VS_MTD=[];
@@ -87,13 +82,9 @@ for i=1:(column-1)
 		CV_std=std(data);
 		CV=abs(CV_std);
 		%CV=CV_std^2;			
-		% M 代表第一個且最小的眾數
-		% F 代表出現最多次數, 若為1代表無眾數
-		% C 代表出現眾數, 若為兩個代表眾數有兩個
 		[M,F,C] = mode(data);
 		
-		if F==1
-			%disp('沒有眾數, 使用中位數取代');
+		if F==1			
 			%core=median;
 			core=(max(data)+min(data))/2;
 			%core=median(data);
@@ -109,8 +100,7 @@ for i=1:(column-1)
 			SkewU_G=GU/(GL+GU);
 			
 			if GL==0
-				%ak=core/5;
-				%嘗試考慮ak=core, 不要讓範圍擴大
+				%ak=core/5;				
 				ak=core;
 				
 			else
@@ -118,8 +108,7 @@ for i=1:(column-1)
 			end
 			
 			if GU==0
-				%bk=core*5;				
-				%等一下嘗試考慮bk=core, 不要讓範圍擴大
+				%bk=core*5;								
 				bk=core;
 			else
 				bk=core+SkewU_G*((-2*(CV/GU)*log(10^(-20)))^0.5);
@@ -127,9 +116,7 @@ for i=1:(column-1)
 			
 			if GL==0 && GU==0
 				%ak=core/5;
-				%bk=core*5;
-				%若抽到的數都一樣, 可以考慮直接拔靴法
-				%vir_sample =  ak + (bk-ak)*rand(class_vs_size,1) 直接重抽自己;
+				%bk=core*5;								
 				ak=core;
 				bk=core;
 			end
@@ -139,8 +126,7 @@ for i=1:(column-1)
 		
 		
 		if F~=1
-			if length(C{1})==3
-				%disp('三個眾數');
+			if length(C{1})==3				
 				%core=mode;
 				for p=1:3
 					core=C{1}(p);
@@ -184,8 +170,7 @@ for i=1:(column-1)
 				
 				vir_sample=[vir_sample1;vir_sample2;vir_sample3];
 				
-			elseif length(C{1})==2
-				%disp('二個眾數');
+			elseif length(C{1})==2			
 				for p=1:2
 					core=C{1}(p);
 					tempL=find(data<core >0);
@@ -226,8 +211,7 @@ for i=1:(column-1)
 				
 				vir_sample=[vir_sample1;vir_sample2];
 				
-			else
-				%disp('只有一個眾數');
+			else				
 				%core=mode
 				core=C{1}(1);
 				tempL=find(data<core >0);
