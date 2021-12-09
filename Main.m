@@ -1,40 +1,36 @@
 
 clc
-clear%主程式
-%資料集: CF dqc servoR concrete yh concreteSlump1
-data=load('BC.txt'); %載資料
+clear
+data=load('BC.txt');
 [row,column]=size(data);
-exp_times=30; 					% 實驗次數
-class = max(data(:,end));       % 類別數    
-
-% 將各類別的 data 分割出來----------------------
+exp_times=30; 		
+class = max(data(:,end));
 	if class==2
 		[pattern1,pattern2] = cut_class_data(data);  	
-		pattern1_size = length(pattern1(:,1));          % class1 的樣本數
-		pattern2_size = length(pattern2(:,1));          % class2 的樣本數
-		rate_pattern1 = pattern1_size/row;        		% class1 所佔比例
-		rate_pattern2 = pattern2_size/row;        		% class2 所佔比例
+		pattern1_size = length(pattern1(:,1));         
+		pattern2_size = length(pattern2(:,1));         
+		rate_pattern1 = pattern1_size/row;        	
+		rate_pattern2 = pattern2_size/row;        	
 		
 	elseif class==3
 		[pattern1,pattern2,pattern3] = cut_class_data(data);  
-		pattern1_size = length(pattern1(:,1));          % class1 的樣本數
-		pattern2_size = length(pattern2(:,1));          % class2 的樣本數
-		pattern3_size = length(pattern3(:,1));          % class3 的樣本數
-		rate_pattern1 = pattern1_size/row;        		% class1 所佔比例
-		rate_pattern2 = pattern2_size/row;        		% class2 所佔比例
-		rate_pattern3 = pattern3_size/row;        		% class3 所佔比例
+		pattern1_size = length(pattern1(:,1));          
+		pattern2_size = length(pattern2(:,1));          
+		pattern3_size = length(pattern3(:,1));          
+		rate_pattern1 = pattern1_size/row;        	
+		rate_pattern2 = pattern2_size/row;        	
+		rate_pattern3 = pattern3_size/row;        	
 	
 	end	
 
 for tt=1:1
-	%train_size=tt*3;						% 訓練資料筆數	10,10,100
-	train_size=16;						% 訓練資料筆數	10,10,100
-	test_data_size=row-train_size;  		% 測試資料筆數
-	vs_size=round((train_size/2)/class);   % 虛擬樣本數量
-	%vs_size=round(100/class);       		% 虛擬樣本數量 取100則t-test容易不顯著
+	%train_size=tt*3;	
+	train_size=16;		
+	test_data_size=row-train_size; 
+	vs_size=round((train_size/2)/class); 
+	%vs_size=round(100/class);       	
 	
-	for aa=1:exp_times 
-		% training data 選出的方式--每個類別資料個數照比例rate_pattern1,rate_pattern2,...抽取
+	for aa=1:exp_times 		
 		if class==2	
 			train_size1 = round(rate_pattern1*train_size);
 			train_size2 = train_size-train_size1;
@@ -45,11 +41,11 @@ for tt=1:1
 			TRS1=randi(pattern1_size,1,train_size1);
 			TRS2=randi(pattern2_size,1,train_size2);
 			for i=1:train_size1
-				TRS1_Class(i)=pattern1(TRS1(i),column); 	% 取出train_size1的class
+				TRS1_Class(i)=pattern1(TRS1(i),column); 	
 				TRS1_Attr(i,:)=pattern1(TRS1(i),1:(column-1)); 
 			end
 			for i=1:train_size2
-				TRS2_Class(i)=pattern2(TRS2(i),column); 	% 取出train_size2的class
+				TRS2_Class(i)=pattern2(TRS2(i),column); 	
 				TRS2_Attr(i,:)=pattern2(TRS2(i),1:(column-1));
 			end
 		
@@ -80,15 +76,15 @@ for tt=1:1
 			TRS3=randi(pattern3_size,1,train_size3);
 		
 			for i=1:train_size1
-				TRS1_Class(i)=pattern1(TRS1(i),column); % 取出train_size1的class
+				TRS1_Class(i)=pattern1(TRS1(i),column); 
 				TRS1_Attr(i,:)=pattern1(TRS1(i),1:(column-1)); 
 			end	
 			for i=1:train_size2
-				TRS2_Class(i)=pattern2(TRS2(i),column); % 取出train_size2的class
+				TRS2_Class(i)=pattern2(TRS2(i),column); 
 				TRS2_Attr(i,:)=pattern2(TRS2(i),1:(column-1));
 			end	
 			for i=1:train_size3
-				TRS3_Class(i)=pattern3(TRS3(i),column); % 取出train_size3的class
+				TRS3_Class(i)=pattern3(TRS3(i),column); 
 				TRS3_Attr(i,:)=pattern3(TRS3(i),1:(column-1));
 			end
 		
